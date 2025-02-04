@@ -1,25 +1,42 @@
-// // console.log('My code is running');
-// // console.log('My code is still running');
+/* Global Variables */
+let allItems = [];
+let userInput = '';
 
-let listItems = []; //array to hold to do list items
+/* Dynamically displays items from allItems array */
+const displayItems = () => {
+  let allItemsList = document.querySelector('#all-tasks-list');
+  let listContents = allItems.map((elm) => `<div><button class="item">${elm}</button><button class='x'>x</button></div>`)
+  .reduce((acc, elm) => acc += elm, '');
+  allItemsList.innerHTML = listContents;
+};
 
-function addToList(...task) {
-  listItems.push(task);
-}
+/* On button click, grabs input box value, adds to allItems array, and displays */
+const getInputValue = () => {
+  let inputBox = document.querySelector('#input-box');
+  let addBtn = document.querySelector('#add-item-button');
 
-addToList('check emails', 'complete project', 'go to gym', 'read');
+  inputBox.addEventListener('input', (eventObj) => {
+    userInput = eventObj.target.value;
+  });
 
-let alteredList = listItems.reduce((acc, item) => {
-  return acc + item
-}, "")
-console.log(listItems);
+  addBtn.addEventListener('click', () => {
+    allItems.push(userInput);
+    inputBox.value = '';
+    displayItems();
+  });
+};
 
-console.log(alteredList);
+getInputValue();
 
-document.addEventListener('DOMContentLoaded', function() {
-  for (i = 0; i < listItems.length; i++) {
-    let li = document.createElement('li');
-    li.innerText = listItems[i];
-    myList.appendChild(li);
-  }
-})
+/* Changes '.item' button class when clicked */
+const changeButtonStyle = () => {
+  let allItemList = document.querySelector('#all-items-list');
+  allItemList.addEventListener('click', (eventObj) => {
+    if (eventObj.target.tagName === 'BUTTON' && eventObj.target.className !== 'x'){
+      let newClass = eventObj.target.className === 'item' ? 'item-crossed' : 'item';
+      eventObj.target.className = newClass;
+    }
+  });
+};
+
+changeButtonStyle();
